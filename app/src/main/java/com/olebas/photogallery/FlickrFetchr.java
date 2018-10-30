@@ -64,7 +64,6 @@ public class FlickrFetchr {
                     .appendQueryParameter("extras", "url_s")
                     .appendQueryParameter("page", String.valueOf(pageNumber))
                     .build().toString();
-            Log.i(TAG, "fetchItems: URL = " + url);
             String jsonString = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonString);
             JSONObject jsonBody = new JSONObject(jsonString);

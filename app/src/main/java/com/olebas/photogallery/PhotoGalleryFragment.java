@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class PhotoGalleryFragment extends Fragment {
     private RecyclerView mPhotoRecyclerView;
     private List<GalleryItem> mItems = new ArrayList<>();
     private int mPageNumber = 1;
+    private int mNumColumns = 3;
 
     public static PhotoGalleryFragment newInstance() {
         return new PhotoGalleryFragment();
@@ -42,7 +44,7 @@ public class PhotoGalleryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_gallery, container, false);
         mPhotoRecyclerView = (RecyclerView) view.findViewById(R.id.photo_recycler_view);
-        mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), mNumColumns));
         mPhotoRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -51,10 +53,20 @@ public class PhotoGalleryFragment extends Fragment {
                 int totalItems = lm.getItemCount();
                 int lastVisibleItem = lm.findLastVisibleItemPosition();
 
-                if ((lastVisibleItem + 6) >= totalItems && mPageNumber < 10) {
+                if ((lastVisibleItem + 10) >= totalItems && mPageNumber < 10) {
                     mPageNumber++;
                     new FetchItemTask().execute();
                 }
+            }
+        });
+
+        mPhotoRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                GridLayoutManager manager = (GridLayoutManager) mPhotoRecyclerView.getLayoutManager();
+                float currentWidth = manager.getWidth();
+                mNumColumns = (int) currentWidth / 300;
+                manager.setSpanCount(mNumColumns);
             }
         });
         setupAdapter();
@@ -82,8 +94,6 @@ public class PhotoGalleryFragment extends Fragment {
             } else {
                 int oldSize = mItems.size();
                 mItems.addAll(galleryItems);
-                Log.i(TAG, "onPostExecute: added " + mItems.size() + " items");
-                Toast.makeText(getActivity(), "Got more items!", Toast.LENGTH_SHORT).show();
                 mPhotoRecyclerView.getAdapter().notifyItemRangeInserted(oldSize, galleryItems.size());
             }
         }
