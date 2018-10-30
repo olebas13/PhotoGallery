@@ -1,9 +1,16 @@
 package com.olebas.photogallery;
 
+import com.google.gson.annotations.SerializedName;
+
 public class GalleryItem {
 
+    @SerializedName("title")
     private String mCaption;
+
+    @SerializedName("id")
     private String mId;
+
+    @SerializedName("s_url")
     private String mUrl;
 
     @Override
