@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.RecyclerView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/photo_recycler_view"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".PhotoGalleryActivity"/>
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/photo_recycler_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        tools:context=".PhotoGalleryActivity"/>
+
+    <ProgressBar
+        android:id="@+id/circle_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal|center_vertical"/>
+
+</FrameLayout>
+

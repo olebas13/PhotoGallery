@@ -31,12 +31,19 @@ public class PhotoCache {
     }
 
     public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (key == null || bitmap == null) {
+            return;
+        }
+
         if (getBitmapFromMemCache(key) == null) {
             mCachedPhotos.put(key, bitmap);
         }
     }
 
     public Bitmap getBitmapFromMemCache(String key) {
+        if (key == null) {
+            return null;
+        }
         return mCachedPhotos.get(key);
     }
 }
